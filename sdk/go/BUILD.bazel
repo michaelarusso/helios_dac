@@ -1,0 +1,28 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+cc_library(
+    name = "helios_wrapper",
+    srcs = ["wrapper.cpp"],
+    hdrs = ["wrapper.h"],
+    visibility = ["//visibility:private"],
+    deps = ["//sdk/cpp:helios_dac"],
+)
+
+go_library(
+    name = "helios",
+    srcs = [
+        "helios.go",
+        "wrapper.h",
+    ],
+    cdeps = [":helios_wrapper"],
+    cgo = True,
+    importpath = "github.com/Grix/helios_dac/sdk/go/helios",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "helios_test",
+    srcs = ["helios_test.go"],
+    embed = [":helios"],
+)

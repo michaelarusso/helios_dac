@@ -306,3 +306,7 @@ $RECYCLE.BIN/
 /hardware/Kicad_PCB_helios/Helios-backups
 hardware/Kicad_PCB_helios/fp-info-cache
 /hardware/Kicad_PCB_helios/rescue-backup
+
+# Bazel auto-generaged files and directories
+MODULE.bazel.lock
+bazel-*

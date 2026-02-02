@@ -1,0 +1,34 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "helios_dac",
+    srcs = [
+        "HeliosDac.cpp",
+        "idn/idn.cpp",
+        "idn/idnServerList.cpp",
+    ] + select({
+        "@platforms//os:windows": ["idn/plt-windows.cpp"],
+        "//conditions:default": ["idn/plt-posix.cpp"],
+    }),
+    hdrs = glob(
+        include = [
+            "*.h",
+            "idn/*.h",
+        ],
+        exclude = ["libusb.h"],
+    ),
+    copts = [
+        "-O2",
+        "-Wall",
+    ],
+    includes = ["sdk/cpp"],
+    # pthread is required by libusb on Linux
+    linkopts = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["-pthread"],
+    }),
+    visibility = ["//visibility:public"],
+    deps = [
+        "@libusb",
+    ],
+)
